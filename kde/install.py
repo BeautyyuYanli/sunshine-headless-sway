@@ -97,8 +97,6 @@ def install():
         "kwriteconfig6",
         "kreadconfig6",
         "foot",
-        "quickshell",
-        "dolphin",
     )
     missing = [name for name in dependencies if not shutil.which(name)]
     if missing:
@@ -118,7 +116,6 @@ def install():
         "pipewire.conf",
     ):
         shutil.copy2(SOURCE / name, DEST / name)
-    shutil.copytree(SOURCE / "quickshell", DEST / "quickshell", dirs_exist_ok=True)
     shutil.copy2(SOURCE / "gamescope", DEST / "bin/gamescope")
     shutil.copy2(
         SOURCE / "sunshine-headless.service", UNITS / "sunshine-headless.service"

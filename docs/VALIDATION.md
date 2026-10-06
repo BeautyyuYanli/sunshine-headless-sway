@@ -22,7 +22,7 @@ Not yet validated:
 - Touch/pen clients, controllers, HDR, logout and full reboot. Gamepads read directly through evdev are outside this profile's isolation guarantee.
 
 
-## Quickshell panel and Dock
+## Quickshell panel and Dock (now maintained separately)
 
 Validated with Quickshell 0.3.1 on the existing live session, without restarting
 Sway, Sunshine or the running game:
@@ -37,3 +37,11 @@ Sway, Sunshine or the running game:
   narrowly scoped suppressions for Quickshell's runtime PanelWindow type metadata.
 - Existing six Python tests and Python lint still pass. Gamepad/touch navigation
   and very small client screens remain unvalidated.
+
+The panel sources have since moved to the independent local Git project
+`~/Projects/sway-quickshell`, linked at `~/.config/quickshell/sway-desktop`.
+The headless profile includes only that project's Sway snippet. Migration
+confirmed a single Quickshell instance loading the new path, with the Sunshine
+service PID unchanged and the current output mode restored after Sway reload.
+The previous deployed QML is archived under
+`~/.local/state/sunshine-headless/quickshell-before-split` for recovery.

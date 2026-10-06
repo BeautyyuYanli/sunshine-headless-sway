@@ -6,7 +6,7 @@ The local KDE desktop keeps its physical displays, keyboard, mouse and audio. Su
 
 ## KDE profile
 
-Requirements: Sway, Sunshine with wlr-screencopy support, NVIDIA drivers, PipeWire (including its PulseAudio module), WirePlumber with the `policy` profile, `pactl`, Python with `dbus-python`, KDE configuration tools, `dbus-run-session`, Foot, Quickshell (tested with 0.3.1), and Dolphin. The user must already have access to input devices, `/dev/uinput`, and the GPU render node. The installer checks dependencies and does not install packages or change group membership.
+Requirements: Sway, Sunshine with wlr-screencopy support, NVIDIA drivers, PipeWire (including its PulseAudio module), WirePlumber with the `policy` profile, `pactl`, Python with `dbus-python`, KDE configuration tools, `dbus-run-session`, and Foot. The user must already have access to input devices, `/dev/uinput`, and the GPU render node. The installer checks dependencies and does not install packages or change group membership.
 
 ```sh
 python kde/install.py install
@@ -27,7 +27,7 @@ To update: edit the repository source (or original Sunshine app definitions), re
 
 Connect to the same host from Moonlight. `DefaultDesktop` shows the independent Sway session with a terminal. The original Genshin and Zenless Zone Zero entries are migrated when their known `sunshine-virtual-output` wrappers are present. `Terminal (Sway)` is also added.
 
-- Super+B: show/hide the top panel and Dock over a fullscreen window.
+- Super+B: show/hide the optional standalone Quickshell panel and Dock.
 - Super+Enter: terminal (explicitly uses Bash, independent of Foot's configured shell).
 - Super+F: toggle fullscreen; Super+Space: toggle floating.
 - Super+Shift+Q: close the focused window.
@@ -44,28 +44,16 @@ Applications must start in the private environment. For manual commands:
 
 The gamescope wrapper reads Sway's actual output mode and changes only gamescope display options, preserving everything after `--`. Existing launcher instances must be closed before launching them remotely. Home directories, game files and application configuration are still shared. Steam and other single-instance applications may need a dedicated Linux user if local and remote instances must run simultaneously.
 
-## Top panel and window Dock
+## Optional desktop panel and Dock
 
-The private Sway session starts the Quickshell configuration in `kde/quickshell/`.
-The top panel shows workspaces, the active window, display size, private audio
-volume and the clock. Click volume to mute; scroll over it to adjust volume.
-The bottom Dock opens terminals/files and lists each running window separately.
-Click a window to activate it, including windows on other workspaces; scroll the
-Dock when the window list overflows. The focused window has a teal indicator.
+Quickshell is maintained separately in the `sway-quickshell` project. This
+profile only includes `~/.config/quickshell/sway-desktop/sway.conf` when present;
+its installer does not install, copy or modify desktop UI files. Follow the
+standalone project's README to install the panel. The session works without it.
 
-Both panels hide automatically while an application is fullscreen. Super+B
-reveals them above the game, and switching windows clears that temporary reveal.
-Switching away from a fullscreen window temporarily leaves fullscreen so Sway
-can focus sibling windows; returning to that window restores fullscreen.
-Panels reserve space for ordinary windows and never take keyboard focus. Window
-and workspace data come from the private Wayland/Sway connections, while audio
-controls use its private PipeWire instance. Bundled fallback icons work without
-a host icon theme. Notifications, a full app menu and a system tray are not included.
-
-Edit the repository QML files, then run `python kde/install.py install`.
-Quickshell live-reloads deployed QML. For Sway binding/autostart changes, run
-`~/.local/share/sunshine-headless/session.py exec swaymsg reload`; this keeps
-running applications alive. The `--no-duplicate` flag prevents multiple panels.
+On the configured host the independent checkout is `~/Projects/sway-quickshell`.
+Edit its QML directly for live reload. Sway binding changes need only
+`~/.local/share/sunshine-headless/session.py exec swaymsg reload`.
 
 ## Isolation and lifecycle
 
