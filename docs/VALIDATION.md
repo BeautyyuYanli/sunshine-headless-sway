@@ -20,3 +20,20 @@ Not yet validated:
 - An actual Moonlight client streaming session, including user-perceived latency, keyboard/mouse interaction and audio over the network.
 - End-to-end Genshin/ZZZ gameplay. Launch entries were migrated and gamescope mode selection checked without starting or updating a game.
 - Touch/pen clients, controllers, HDR, logout and full reboot. Gamepads read directly through evdev are outside this profile's isolation guarantee.
+
+
+## Quickshell panel and Dock
+
+Validated with Quickshell 0.3.1 on the existing live session, without restarting
+Sway, Sunshine or the running game:
+
+- Top workspace/active-title/display/audio/clock panel and bottom window Dock rendered.
+- Real Sunshine virtual-mouse input switched between test windows and workspaces.
+- Switching from a fullscreen game to a sibling terminal and back restored the
+  game's fullscreen state. Inline hit targets avoid popup tooltips swallowing clicks.
+- Top-panel mute changed only the private audio sink; host mute state was unchanged,
+  and the original private mute state was restored after testing.
+- Quickshell stayed a single instance across Sway reloads. QML lint passed with
+  narrowly scoped suppressions for Quickshell's runtime PanelWindow type metadata.
+- Existing six Python tests and Python lint still pass. Gamepad/touch navigation
+  and very small client screens remain unvalidated.
