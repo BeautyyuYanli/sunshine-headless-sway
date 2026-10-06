@@ -1,0 +1,117 @@
+#!/usr/bin/python3
+"""Read the private Sway output and override only gamescope display options."""
+
+import datetime
+import json
+import math
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+REAL = "/usr/bin/gamescope"
+LONG = {
+    "--nested-width",
+    "--nested-height",
+    "--output-width",
+    "--output-height",
+    "--nested-refresh",
+    "--nested-unfocused-refresh",
+}
+SHORT = set("whWHro")
+
+
+def rewrite(args: list[str], w: int, h: int, fps: int) -> list[str]:
+    if "--" not in args:
+        raise ValueError("Missing game command separator --")
+    split = args.index("--")
+    head = args[:split]
+    tail = args[split:]
+    out = []
+    i = 0
+    while i < len(head):
+        a = head[i]
+        key = a.split("=", 1)[0]
+        if key in LONG:
+            if "=" not in a:
+                if i + 1 >= len(head):
+                    raise ValueError("Missing value for " + a)
+                i += 1
+        elif (
+            len(a) >= 2
+            and a[0] == "-"
+            and a[1] in SHORT
+            and (len(a) == 2 or a[2:].lstrip("=").replace(".", "", 1).isdigit())
+        ):
+            if len(a) == 2:
+                if i + 1 >= len(head):
+                    raise ValueError("Missing value for " + a)
+                i += 1
+        else:
+            out.append(a)
+        i += 1
+    return (
+        out
+        + [
+            "--nested-width",
+            str(w),
+            "--nested-height",
+            str(h),
+            "--output-width",
+            str(w),
+            "--output-height",
+            str(h),
+            "--nested-refresh",
+            str(fps),
+            "--nested-unfocused-refresh",
+            str(fps),
+        ]
+        + tail
+    )
+
+
+def main() -> None:
+    data = json.loads(
+        subprocess.check_output(
+            ["swaymsg", "-r", "-t", "get_outputs"], text=True, timeout=12
+        )
+    )
+    o = next(o for o in data if o["name"] == "HEADLESS-1" and o["active"])
+    m = o["current_mode"]
+    w = int(m["width"])
+    h = int(m["height"])
+    hz = float(m["refresh"]) / 1000
+    if not (
+        320 <= w <= 7680 and 240 <= h <= 7680 and math.isfinite(hz) and 24 <= hz <= 240
+    ):
+        raise ValueError("Invalid virtual output mode")
+    fps = round(hz)
+    args = rewrite(sys.argv[1:], w, h, fps)
+    # Dry-run prints only gamescope options, not potentially sensitive game arguments.
+    record = {
+        "time": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        "mode": [w, h, hz],
+        "gamescope_options": args[: args.index("--")],
+    }
+    if os.environ.get("SUNSHINE_GAMESCOPE_DRY_RUN") == "1":
+        print(json.dumps(record))
+        return
+    p = Path.home() / ".local/state/sunshine-headless/gamescope-wrapper.log"
+    p.parent.mkdir(parents=True, exist_ok=True)
+    with p.open("a") as f:
+        f.write(json.dumps(record) + "\n")
+    os.execv(REAL, [REAL] + args)
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except (
+        OSError,
+        ValueError,
+        KeyError,
+        StopIteration,
+        subprocess.SubprocessError,
+    ) as e:
+        print("Sunshine gamescope wrapper: " + str(e), file=sys.stderr)
+        sys.exit(1)
