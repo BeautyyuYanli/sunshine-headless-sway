@@ -22,26 +22,20 @@ Not yet validated:
 - Touch/pen clients, controllers, HDR, logout and full reboot. Gamepads read directly through evdev are outside this profile's isolation guarantee.
 
 
-## Quickshell panel and Dock (now maintained separately)
+## DMS desktop shell
 
-Validated with Quickshell 0.3.1 on the existing live session, without restarting
-Sway, Sunshine or the running game:
+The custom Quickshell panel has been replaced by the separately installed DMS
+v1.6.2. The former local source checkout, config symlink and deployment backup
+were removed at the user's request. `~/.config/sway/dms.conf` owns startup and
+shortcuts; DMS UI/IPC generates its settings in `~/.config/DankMaterialShell`.
 
-- Top workspace/active-title/display/audio/clock panel and bottom window Dock rendered.
-- Real Sunshine virtual-mouse input switched between test windows and workspaces.
-- Switching from a fullscreen game to a sibling terminal and back restored the
-  game's fullscreen state. Inline hit targets avoid popup tooltips swallowing clicks.
-- Top-panel mute changed only the private audio sink; host mute state was unchanged,
-  and the original private mute state was restored after testing.
-- Quickshell stayed a single instance across Sway reloads. QML lint passed with
-  narrowly scoped suppressions for Quickshell's runtime PanelWindow type metadata.
-- Existing six Python tests and Python lint still pass. Gamepad/touch navigation
-  and very small client screens remain unvalidated.
+Validated on the live session:
 
-The panel sources have since moved to the independent local Git project
-`~/Projects/sway-quickshell`, linked at `~/.config/quickshell/sway-desktop`.
-The headless profile includes only that project's Sway snippet. Migration
-confirmed a single Quickshell instance loading the new path, with the Sunshine
-service PID unchanged and the current output mode restored after Sway reload.
-The previous deployed QML is archived under
-`~/.local/state/sunshine-headless/quickshell-before-split` for recovery.
+- A single DMS Quickshell instance after Sway reload.
+- Top bar, bottom Dock and application launcher render correctly.
+- DMS inherits private Wayland, Sway IPC, PipeWire and PulseAudio endpoints.
+- Dock enabled with auto-hide, overlay layer and fullscreen hover support.
+- Sunshine PID unchanged; current output mode preserved after reload.
+
+DMS power-profile and Polkit registration warnings remain on this KDE host;
+those integrations are not part of the validated streaming desktop controls.

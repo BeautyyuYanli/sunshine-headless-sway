@@ -27,7 +27,7 @@ To update: edit the repository source (or original Sunshine app definitions), re
 
 Connect to the same host from Moonlight. `DefaultDesktop` shows the independent Sway session with a terminal. The original Genshin and Zenless Zone Zero entries are migrated when their known `sunshine-virtual-output` wrappers are present. `Terminal (Sway)` is also added.
 
-- Super+B: show/hide the optional standalone Quickshell panel and Dock.
+- With DMS: Super+D opens the launcher, Super+B toggles the Dock, Super+N opens notifications, Super+comma opens settings.
 - Super+Enter: terminal (explicitly uses Bash, independent of Foot's configured shell).
 - Super+F: toggle fullscreen; Super+Space: toggle floating.
 - Super+Shift+Q: close the focused window.
@@ -44,16 +44,17 @@ Applications must start in the private environment. For manual commands:
 
 The gamescope wrapper reads Sway's actual output mode and changes only gamescope display options, preserving everything after `--`. Existing launcher instances must be closed before launching them remotely. Home directories, game files and application configuration are still shared. Steam and other single-instance applications may need a dedicated Linux user if local and remote instances must run simultaneously.
 
-## Optional desktop panel and Dock
+## Optional desktop shell
 
-Quickshell is maintained separately in the `sway-quickshell` project. This
-profile only includes `~/.config/quickshell/sway-desktop/sway.conf` when present;
-its installer does not install, copy or modify desktop UI files. Follow the
-standalone project's README to install the panel. The session works without it.
+The profile optionally includes `~/.config/sway/dms.conf`. On the configured
+host this starts the separately installed DankMaterialShell using `exec dms run`
+and defines its shortcuts. Start DMS inside Sway, not a shared user service,
+so it inherits the private Wayland, D-Bus and PipeWire environment.
 
-On the configured host the independent checkout is `~/Projects/sway-quickshell`.
-Edit its QML directly for live reload. Sway binding changes need only
-`~/.local/share/sunshine-headless/session.py exec swaymsg reload`.
+DMS settings are managed by its UI/IPC and stored in
+`~/.config/DankMaterialShell/`. The bottom Dock is enabled with auto-hide and
+fullscreen hover support. The former custom Quickshell panel has been removed.
+The headless installer does not own or overwrite DMS settings or the Sway snippet.
 
 ## Isolation and lifecycle
 
