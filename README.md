@@ -6,7 +6,7 @@ The local KDE desktop keeps its physical displays, keyboard, mouse and audio. Su
 
 ## KDE profile
 
-Requirements: Sway, Sunshine with wlr-screencopy support, NVIDIA drivers, PipeWire (including its PulseAudio module), WirePlumber with the `policy` profile, `pactl`, Python with `dbus-python`, KDE configuration tools, `dbus-run-session`, and Foot. The user must already have access to input devices, `/dev/uinput`, and the GPU render node. The installer checks dependencies and does not install packages or change group membership.
+Requirements: Sway, Sunshine with wlr-screencopy support, NVIDIA drivers, PipeWire (including its PulseAudio module), WirePlumber with the `policy` profile, `pactl`, Python with `dbus-python`, KDE configuration tools, and `dbus-run-session`. The user must already have access to input devices, `/dev/uinput`, and the GPU render node. The installer checks dependencies and does not install packages or change group membership.
 
 ```sh
 python kde/install.py install
@@ -25,7 +25,7 @@ To update: edit the repository source (or original Sunshine app definitions), re
 
 ## Usage
 
-Connect to the same host from Moonlight. `DefaultDesktop` shows the independent Sway session with a terminal. The original Genshin and Zenless Zone Zero entries are migrated when their known `sunshine-virtual-output` wrappers are present. `Terminal (Sway)` is also added.
+Connect to the same host from Moonlight. `DefaultDesktop` shows the independent Sway desktop. The original Genshin and Zenless Zone Zero entries are migrated when their known `sunshine-virtual-output` wrappers are present.
 
 No custom keyboard bindings are installed. Use the DMS graphical controls.
 
@@ -35,7 +35,6 @@ Applications must start in the private environment. For manual commands:
 
 ```sh
 ~/.local/share/sunshine-headless/session.py exec swaymsg -t get_outputs
-~/.local/share/sunshine-headless/session.py exec foot /bin/bash
 ```
 
 The gamescope wrapper reads Sway's actual output mode and changes only gamescope display options, preserving everything after `--`. Existing launcher instances must be closed before launching them remotely. Home directories, game files and application configuration are still shared. Steam and other single-instance applications may need a dedicated Linux user if local and remote instances must run simultaneously.

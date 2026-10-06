@@ -75,14 +75,6 @@ def migrate_apps(source: dict, dest: Path) -> dict:
             ):
                 if command.endswith("/sunshine-virtual-output/" + old):
                     detached[index] = f'"{root}/launch-game.sh" {game}'
-    if not any(app.get("name") == "Terminal (Sway)" for app in apps.get("apps", [])):
-        apps.setdefault("apps", []).append(
-            {
-                "name": "Terminal (Sway)",
-                "cmd": "foot /bin/bash",
-                "prep-cmd": [{"do": f'"{root}/set-resolution.py"', "undo": ""}],
-            }
-        )
     return apps
 
 
@@ -96,7 +88,6 @@ def install():
         "dbus-run-session",
         "kwriteconfig6",
         "kreadconfig6",
-        "foot",
     )
     missing = [name for name in dependencies if not shutil.which(name)]
     if missing:
