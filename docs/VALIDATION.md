@@ -26,8 +26,7 @@ Not yet validated:
 
 The custom Quickshell panel has been replaced by the separately installed DMS
 v1.6.2. The former local source checkout, config symlink and deployment backup
-were removed at the user's request. `~/.config/sway/dms.conf` owns startup and
-shortcuts; DMS UI/IPC generates its settings in `~/.config/DankMaterialShell`.
+were removed at the user's request. `~/.config/sway/dms.conf` owns startup; custom keyboard bindings have been removed; DMS UI/IPC generates its settings in `~/.config/DankMaterialShell`.
 
 Validated on the live session:
 

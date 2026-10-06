@@ -27,11 +27,7 @@ To update: edit the repository source (or original Sunshine app definitions), re
 
 Connect to the same host from Moonlight. `DefaultDesktop` shows the independent Sway session with a terminal. The original Genshin and Zenless Zone Zero entries are migrated when their known `sunshine-virtual-output` wrappers are present. `Terminal (Sway)` is also added.
 
-- With DMS: Super+D opens the launcher, Super+B toggles the Dock, Super+N opens notifications, Super+comma opens settings.
-- Super+Enter: terminal (explicitly uses Bash, independent of Foot's configured shell).
-- Super+F: toggle fullscreen; Super+Space: toggle floating.
-- Super+Shift+Q: close the focused window.
-- Super+1/2: switch workspace; Super+Shift+1/2: move a window.
+No custom keyboard bindings are installed. Use the DMS graphical controls.
 
 Application-start prep commands apply the client's width, height and frame rate to `HEADLESS-1`. Dimensions are bounded and rounded down to even pixels. A resume of an existing Moonlight session may not rerun prep commands; quit the Moonlight app session before changing its requested mode. Existing games do not automatically rebuild their render resolution on resume.
 
@@ -48,7 +44,7 @@ The gamescope wrapper reads Sway's actual output mode and changes only gamescope
 
 The profile optionally includes `~/.config/sway/dms.conf`. On the configured
 host this starts the separately installed DankMaterialShell using `exec dms run`
-and defines its shortcuts. Start DMS inside Sway, not a shared user service,
+without custom keyboard bindings. Start DMS inside Sway, not a shared user service,
 so it inherits the private Wayland, D-Bus and PipeWire environment.
 
 DMS settings are managed by its UI/IPC and stored in
